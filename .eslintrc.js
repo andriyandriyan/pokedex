@@ -5,5 +5,6 @@ module.exports = {
   },
   rules: {
     'arrow-parens': ['error', 'as-needed'],
+    'react/prop-types': 'off',
   },
 };
