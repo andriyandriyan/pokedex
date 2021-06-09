@@ -10,3 +10,8 @@ export interface Pokemon {
   image: string;
   url: string;
 }
+
+export interface PokemonCardProps {
+  pokemon: Pokemon;
+  ownedCount: number;
+}
