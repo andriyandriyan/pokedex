@@ -1,7 +1,7 @@
 import styled from '@emotion/styled';
 
 const Container = styled.div`
-  padding: 1rem;
+  padding: 0 1rem;
   margin: 0 auto;
 
   @media (min-width: 768px) {
