@@ -3,4 +3,7 @@ module.exports = {
   parserOptions: {
     project: './tsconfig.json',
   },
+  rules: {
+    'arrow-parens': ['error', 'as-needed'],
+  },
 };
