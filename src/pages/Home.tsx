@@ -49,24 +49,32 @@ const LoadMoreButton = styled.button`
 `;
 
 const Home: React.FC = () => {
-  const [offset, setOffset] = React.useState(0);
-  const { data, loading } = useQuery<IData, IVariable>(POKEMONS_QUERY, {
-    variables: { offset },
+  const [pokemons, setPokemons] = React.useState<Pokemon[]>([]);
+  const { loading, fetchMore } = useQuery<IData, IVariable>(POKEMONS_QUERY, {
+    variables: { offset: 0 },
+    onCompleted(data) {
+      setPokemons(data.pokemons.results);
+    },
   });
 
-  if (!data && loading) {
+  const loadMore = () => {
+    fetchMore({ variables: { offset: pokemons.length } })
+      .then(({ data }) => setPokemons(pokemons.concat(data.pokemons.results)));
+  };
+
+  if (!pokemons.length && loading) {
     return <p>Loading...</p>;
   }
 
   return (
     <Container>
       <Grid>
-        {data?.pokemons.results.map(pokemon => (
+        {pokemons.map(pokemon => (
           <PokemonCard key={pokemon.id} pokemon={pokemon} ownedCount={Math.round(Math.random())} />
         ))}
       </Grid>
       <Center>
-        <LoadMoreButton type="button" onClick={() => setOffset(offset + 1)}>
+        <LoadMoreButton type="button" onClick={loadMore}>
           Load More
         </LoadMoreButton>
       </Center>
