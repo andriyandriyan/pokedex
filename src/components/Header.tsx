@@ -21,6 +21,11 @@ const Nav = styled.nav`
   background-color: white;
   box-shadow: rgb(49 53 59 / 12%) 0px 1px 6px 0px;
   padding: 0.5rem;
+  text-align: center;
+
+  @media (min-width: 768px) {
+    text-align: left;
+  }
 `;
 
 const Logo = styled.img`
