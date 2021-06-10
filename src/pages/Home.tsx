@@ -49,17 +49,6 @@ const LoadMoreButton = styled.button`
   }
 `;
 
-const Loading = styled.div`
-  height: 300px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-
-  img {
-    width: 300px;
-  }
-`;
-
 const Home: React.FC = () => {
   const [pokemons, setPokemons] = React.useState<Pokemon[]>([]);
   const [getData, { data, loading }] = useLazyQuery<IData, IVariable>(POKEMONS_QUERY, {
@@ -85,15 +74,19 @@ const Home: React.FC = () => {
           <PokemonCard key={pokemon.id} pokemon={pokemon} ownedCount={Math.round(Math.random())} />
         ))}
       </Grid>
-      {loading ? (
-        <Loading>
-          <img src={bounceGif} alt="loading" />
-        </Loading>
+      {!pokemons.length ? (
+        <Center>
+          <img src={bounceGif} alt="loading" width="300" />
+        </Center>
       ) : (
         <Center>
-          <LoadMoreButton type="button" onClick={loadMore}>
-            Load More
-          </LoadMoreButton>
+          {loading ? (
+            <img src={bounceGif} alt="loading" width="100" />
+          ) : (
+            <LoadMoreButton type="button" onClick={loadMore}>
+              Load More
+            </LoadMoreButton>
+          )}
         </Center>
       )}
     </Container>
