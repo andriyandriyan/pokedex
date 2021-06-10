@@ -11,6 +11,12 @@ const Card = styled.a`
   position: relative;
   text-decoration: none;
   color: black;
+  transition: all .5s;
+  background-color: white;
+
+  &:hover {
+    transform: scale(1.1);
+  }
 `;
 
 const Image = styled.img`
