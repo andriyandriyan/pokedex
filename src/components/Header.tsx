@@ -40,12 +40,20 @@ const Logo = styled.img`
 
 const Row = styled.div`
   display: flex;
-  justify-content: space-between;
+  justify-content: center;
+
+  @media (min-width: 768px) {
+    justify-content: space-between;
+  }
 `;
 
 const Flex = styled.div`
-  display: flex;
+  display: none;
   align-items: center;
+
+  @media (min-width: 768px) {
+    display: flex;
+  }
 `;
 
 const Menu = styled.a`
