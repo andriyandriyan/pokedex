@@ -1,9 +1,10 @@
 import React from 'react';
-import { useQuery } from '@apollo/client';
+import { useLazyQuery } from '@apollo/client';
 import styled from '@emotion/styled';
 import { Data, Pokemon } from '../interfaces';
 import { Container, PokemonCard } from '../components';
 import { POKEMONS_QUERY } from '../queries';
+import bounceGif from '../images/pokeball-bounce.gif';
 
 interface IData {
   pokemons: Data<Pokemon>;
@@ -48,23 +49,34 @@ const LoadMoreButton = styled.button`
   }
 `;
 
+const Loading = styled.div`
+  height: 300px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  img {
+    width: 300px;
+  }
+`;
+
 const Home: React.FC = () => {
   const [pokemons, setPokemons] = React.useState<Pokemon[]>([]);
-  const { loading, fetchMore } = useQuery<IData, IVariable>(POKEMONS_QUERY, {
+  const [getData, { data, loading }] = useLazyQuery<IData, IVariable>(POKEMONS_QUERY, {
     variables: { offset: 0 },
-    onCompleted(data) {
-      setPokemons(data.pokemons.results);
-    },
   });
 
-  const loadMore = () => {
-    fetchMore({ variables: { offset: pokemons.length } })
-      .then(({ data }) => setPokemons(pokemons.concat(data.pokemons.results)));
-  };
+  React.useEffect(() => {
+    getData();
+  }, [getData]);
 
-  if (!pokemons.length && loading) {
-    return <p>Loading...</p>;
-  }
+  React.useEffect(() => {
+    if (data?.pokemons.results) {
+      setPokemons(pokemons.concat(data.pokemons.results));
+    }
+  }, [data]);
+
+  const loadMore = () => getData({ variables: { offset: pokemons.length } });
 
   return (
     <Container>
@@ -73,11 +85,17 @@ const Home: React.FC = () => {
           <PokemonCard key={pokemon.id} pokemon={pokemon} ownedCount={Math.round(Math.random())} />
         ))}
       </Grid>
-      <Center>
-        <LoadMoreButton type="button" onClick={loadMore}>
-          Load More
-        </LoadMoreButton>
-      </Center>
+      {loading ? (
+        <Loading>
+          <img src={bounceGif} alt="loading" />
+        </Loading>
+      ) : (
+        <Center>
+          <LoadMoreButton type="button" onClick={loadMore}>
+            Load More
+          </LoadMoreButton>
+        </Center>
+      )}
     </Container>
 
   );
